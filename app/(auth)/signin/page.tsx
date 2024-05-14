@@ -83,7 +83,7 @@ function Page() {
                         <ButtonSubmit isPending={isPending} title="Sign In"/>
                     </form>
                 </Form>
-                <h2 className="font-extralight text-sm">Don't have an acount? <span className="font-medium"> <Link href={'/signup'}>Sign up</Link></span></h2>
+                <h2 className="font-extralight text-sm">Don&apos;t have an acount? <span className="font-medium"> <Link href={'/signup'}>Sign up</Link></span></h2>
             </div>
         </section>
     )
