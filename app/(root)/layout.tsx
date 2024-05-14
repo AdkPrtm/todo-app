@@ -7,6 +7,8 @@ import Sidebar from "@/components/shared/Sidebar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(`${process.env.NEXT_WEBSITE_URL}`),
+  
   title: "Todo App",
   description: "Stay organized and boost your productivity with our user-friendly to-do application. Manage tasks, set reminders, and track progress seamlessly. Perfect for individuals and teams looking to streamline their workflow. Try our task manager today!",
 
