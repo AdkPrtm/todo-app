@@ -40,7 +40,6 @@ export type SignUpUserBody = {
 export type AddTaskParams = {
     title: string,
     description: string,
-    userId: string,
     deadline: Date,
     important: boolean,
     completed: boolean,

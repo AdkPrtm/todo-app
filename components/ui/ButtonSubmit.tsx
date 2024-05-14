@@ -8,7 +8,7 @@ type ButtonSubmitProps = {
 }
 function ButtonSubmit(props: Readonly<ButtonSubmitProps>) {
     return (
-        <Button type="submit" className={`inline-flex items-center ${props.width ? props.width : 'w-full'} font-semibold leading-6 text-sm rounded-full ${props.isPending && 'cursor-not-allowed'}`} disabled={props.isPending}>
+        <Button type="submit" className={`inline-flex items-center ${props.width ? props.width : 'w-full'} font-medium leading-6 text-sm rounded-full`} disabled={props.isPending}>
             {
                 props.isPending ? <>
                     <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

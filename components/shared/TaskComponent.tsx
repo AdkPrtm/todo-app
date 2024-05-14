@@ -4,10 +4,8 @@ import { EnumTaskComponent, DataTaskParams } from "@/types/types"
 import { Dialog, DialogTrigger, } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import FormAddTask from "./FormAddTask"
-import { sessionData } from "@/lib/actions/AuthAction"
 
-async function TaskComponent({ typeTask, dataTask }: Readonly<{ typeTask: EnumTaskComponent, dataTask: DataTaskParams[] | undefined }>) {
-    const data = await sessionData()
+function TaskComponent({ typeTask, dataTask }: Readonly<{ typeTask: EnumTaskComponent, dataTask: DataTaskParams[] | undefined }>) {
     return (
         <div className={style.entireBackgroundTask}>
             <div className={style.sideTask}>
@@ -30,7 +28,7 @@ async function TaskComponent({ typeTask, dataTask }: Readonly<{ typeTask: EnumTa
                                 <h2>Add new task</h2>
                             </Button>
                         </DialogTrigger>
-                        <FormAddTask userId={data?.id ?? ''} />
+                        <FormAddTask type="Create" />
                     </Dialog>
                 </div>
             </div>

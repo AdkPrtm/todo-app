@@ -9,10 +9,7 @@ export default {
             name: "Credentials",
             async authorize(credentials, request): Promise<User | null> {
                 const { email, password } = await request.json();
-                const data: SignInUserParams = {
-                    email: email,
-                    password: password
-                }
+                const data: SignInUserParams = { email, password }
                 const { user, error } = await signInUser(data);
                 if (user) return user
                 throw new Error(JSON.stringify({ errors: error }),)

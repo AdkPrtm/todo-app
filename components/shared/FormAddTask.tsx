@@ -17,39 +17,60 @@ import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
 import { useRef, useState, useTransition } from "react";
-import { addTaskByUser } from "@/lib/db/actions/task.actions";
-import { AddTaskParams } from "@/types/types";
+import { addTaskByUser, updateTaskById } from "@/lib/db/actions/task.actions";
 import ButtonSubmit from "../ui/ButtonSubmit";
+import { DataTaskParams } from "@/types/types";
+import { useRouter } from "next/navigation";
 
-function FormAddTask(props: Readonly<{ userId: string }>) {
-    const { userId } = props;
+type TaskFormProps = {
+    taskId?: string,
+    task?: DataTaskParams,
+    type: 'Create' | 'Update',
+}
+function FormAddTask({ taskId, task, type }: Readonly<TaskFormProps>) {
+    const router = useRouter();
     const [isPending, setTransition] = useTransition()
     const closeButtonRef = useRef<HTMLButtonElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>()
     const form = useForm<z.infer<typeof addTaskSchema>>({
         resolver: zodResolver(addTaskSchema),
-        defaultValues: {
+        defaultValues: task && type === 'Update' ? { ...task, deadline: new Date(task.deadline) } : {
             title: "",
             description: "",
         },
     })
 
     function onSubmit(values: z.infer<typeof addTaskSchema>): void {
-        const data: AddTaskParams = { ...values, userId }
-        setTransition(async () => {
-            const { error } = await addTaskByUser(data)
-            if (error) return setErrorMessage(error)
-            setErrorMessage(undefined)
-            form.reset()
-            if (closeButtonRef.current) {
-                closeButtonRef.current.click();
-            }
-        })
+        if (type === "Create") {
+            setTransition(async () => {
+                const { error } = await addTaskByUser(values)
+                if (error) return setErrorMessage(error)
+                if (closeButtonRef.current) {
+                    setErrorMessage(undefined)
+                    form.reset()
+                    router.refresh()
+                    closeButtonRef.current.click();
+                }
+            })
+        } else if (type === "Update") {
+            setTransition(async () => {
+                if (!taskId) return;
+                const data = { ...values, id: taskId }
+                const { error } = await updateTaskById(data)
+                if (error) return setErrorMessage(error)
+                if (closeButtonRef.current) {
+                    setErrorMessage(undefined)
+                    form.reset()
+                    router.refresh()
+                    closeButtonRef.current.click();
+                }
+            })
+        }
     }
     return (
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md w-4/5 rounded-lg">
             <DialogHeader>
-                <DialogTitle>Add New Task</DialogTitle>
+                <DialogTitle>{`${type === 'Create' ? 'Add New' : 'Update'}`} Task</DialogTitle>
             </DialogHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -175,7 +196,7 @@ function FormAddTask(props: Readonly<{ userId: string }>) {
                                 Close
                             </Button>
                         </DialogClose>
-                        <ButtonSubmit isPending={isPending} title="Add Task" width="w-1/3" />
+                        <ButtonSubmit isPending={isPending} width="w-fit" title={`${type === 'Create' ? 'Add New Task' : 'Update Task'}`}/>
                     </DialogFooter>
                 </form>
             </Form>

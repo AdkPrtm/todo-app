@@ -1,12 +1,16 @@
 'use server'
 
-import { AddTaskParams } from "@/types/types"
+import { AddTaskParams, DataTaskParams } from "@/types/types"
 import prisma from "../db"
 import { sessionData } from "@/lib/actions/AuthAction"
 
 export const addTaskByUser = async (params: AddTaskParams) => {
+    const dataSession = await sessionData()
+    if (!dataSession?.id) return { error: 'Get user failed' }
+    const userId = dataSession.id
+    const data = { ...params, userId }
     try {
-        await prisma.task.create({ data: params })
+        await prisma.task.create({ data: data })
         return { success: 'Task added successfully' }
     } catch (error) {
         return { error: 'Task creation failed' }
@@ -15,7 +19,7 @@ export const addTaskByUser = async (params: AddTaskParams) => {
 
 export const getTaskByUser = async () => {
     const data = await sessionData()
-    if (!data?.id) return { error: 'Get id failed' }
+    if (!data?.id) return { error: 'Get user failed' }
     try {
         const res = await prisma.task.findMany({
             where: {
@@ -35,6 +39,35 @@ export const getTaskByUser = async () => {
         })
         return { success: { data: { res } } }
     } catch (error) {
-        return { error: 'Get task failed' }
+        return { error: 'Something went wrong' }
+    }
+}
+
+export const updateTaskById = async (data: DataTaskParams) => {
+    try {
+        const { id, ...allData } = data
+        const res = await prisma.task.update({ where: { id: id }, data: allData })
+        return { success: { data: res } }
+    } catch (error) {
+        return { error: 'Something went wrong' }
+    }
+}
+
+export const updateTaskCompleted = async (taskId: string, completed: boolean) => {
+    try {
+        const res = await prisma.task.update({ where: { id: taskId }, data: { completed: completed } })
+        return { success: { data: res } }
+    } catch (error) {
+        return { error: 'Something went wrong' }
+    }
+}
+
+export const deleteTaskById = async (taskId: string) => {
+    if (!taskId) return { error: 'Get task failed' }
+    try {
+        const res = await prisma.task.delete({ where: { id: taskId } })
+        return { success: { data: { res } } }
+    } catch (error) {
+        return { error: 'Something went wrong' }
     }
 }

@@ -4,7 +4,7 @@ import prisma from "../db";
 
 export const signInUser = async (params: SignInUserParams) => {
     const user = await prisma.user.findUnique({
-        where: { email: params.email }
+        where: { email: params.email.toLowerCase() }
     })
     if (!user) return { error: 'User not found' }
 
