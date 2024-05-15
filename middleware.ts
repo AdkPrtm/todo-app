@@ -5,8 +5,9 @@ import { DEFAULT_LOGIN_REDIRECT, apiRoutesPrefix, authRoutes, publicRoutes } fro
 const { auth: middleware } = NextAuth(authConfig)
 
 export default middleware((req) => {
-    const { nextUrl } = req
+    const { nextUrl, } = req
     const isLoggedIn = !!req.auth
+    // const isVerifiedEmail = req.auth?.user.verifiedEmail
 
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiRoutesPrefix)
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
@@ -19,8 +20,11 @@ export default middleware((req) => {
         if (isLoggedIn) return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
         return
     }
+
     //If user not logged in and not in public routes they will redirect to login page
     if (!isLoggedIn) return Response.redirect(new URL('/signin', nextUrl))
+
+    // if (!isLoggedIn && !isVerifiedEmail) return Response.redirect(new URL('/verification', nextUrl))
 })
 
 // Optionally, don't invoke Middleware on some paths

@@ -6,13 +6,17 @@ import { z } from "zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { SignInServer } from "../../../lib/actions/AuthAction"
+import { sendOtp, SignInServer } from "../../../lib/actions/AuthAction"
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { userLoginSchema } from "@/lib/validator"
 import ButtonSubmit from "@/components/ui/ButtonSubmit"
+import { User } from "@prisma/client"
 
-
+interface SignInResponse {
+    user?: User;
+    error?: string;
+  }
 
 function Page() {
     const router = useRouter()
@@ -28,10 +32,11 @@ function Page() {
 
     const onSubmit = async (values: z.infer<typeof userLoginSchema>) => {
         startTransition(async () => {
-            const res = await SignInServer(values)
+            const res: SignInResponse = await SignInServer(values)
             setErrorMessage(res?.error)
             if (res?.user) {
                 form.reset()
+                if (!res?.user.verifiedEmail) await sendOtp()
                 router.push('/')
             }
         })
@@ -79,7 +84,7 @@ function Page() {
                                 </FormItem>
                             )
                         }
-                        <ButtonSubmit isPending={isPending} title="Sign In"/>
+                        <ButtonSubmit isPending={isPending} title="Sign In" />
                     </form>
                 </Form>
                 <h2 className="font-extralight text-sm">Don&apos;t have an acount? <span className="font-medium"> <Link href={'/signup'}>Sign up</Link></span></h2>

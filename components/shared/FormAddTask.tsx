@@ -196,7 +196,7 @@ function FormAddTask({ taskId, task, type }: Readonly<TaskFormProps>) {
                                 Close
                             </Button>
                         </DialogClose>
-                        <ButtonSubmit isPending={isPending} width="w-fit" title={`${type === 'Create' ? 'Add New Task' : 'Update Task'}`}/>
+                        <ButtonSubmit isPending={isPending} width="w-fit lg:w-1/3" title={`${type === 'Create' ? 'Add New Task' : 'Update Task'}`}/>
                     </DialogFooter>
                 </form>
             </Form>

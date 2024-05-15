@@ -31,3 +31,9 @@ export const addTaskSchema = z.object({
     important: z.boolean().default(false),
     completed: z.boolean().default(false),
 })
+
+export const OtpSchema = z.object({
+    otp: z.string().min(6, {
+      message: "OTP must be 6 characters.",
+    }),
+  })

@@ -4,6 +4,8 @@ import "@/app/globals.css";
 import { ProviderTheme } from "../providers/ThemeProvider";
 import Sidebar from "@/components/shared/Sidebar";
 import NextTopLoader from "nextjs-toploader";
+import { sessionData } from "@/lib/actions/AuthAction";
+import { redirect } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,11 +27,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const dataSession = await sessionData()
+  const isVerified = dataSession?.verifiedEmail
+  if (!isVerified) return redirect('/verification')
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>

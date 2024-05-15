@@ -6,15 +6,6 @@ export type NavLinkType = {
     route: string
 }
 
-export type ToDoType = {
-    id: string,
-    title: string,
-    description: string,
-    isCompleted: boolean,
-    isImportant: boolean,
-    date: string,
-}
-
 export enum EnumTaskComponent {
     AllTask = 'All Task',
     Important = 'Important!',

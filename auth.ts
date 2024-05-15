@@ -12,11 +12,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         signIn: '/signin'
     },
     session: {
-        strategy: 'jwt'
+        strategy: 'jwt',
+        maxAge: 7 * 24 * 60 * 60
+    },
+    jwt: {
+        maxAge: 7 * 24 * 60 * 60
     },
     callbacks: {
         async session({ session, token }) {
-            const {sub, createdAt, iat, exp, jti, ...allData } = token
+            const { sub, createdAt, iat, exp, jti, ...allData } = token
             const res = {
                 ...session,
                 user: {
