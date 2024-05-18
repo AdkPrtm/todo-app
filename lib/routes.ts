@@ -22,7 +22,7 @@ export const authRoutes = [
  * Routes that start with this prefix are used for API authentication purposes
  * @type {string}
  */
-export const apiRoutesPrefix = '/api/auth'
+export const apiRoutesPrefix = '/api/'
 
 /**
  * The default  redirect path after logging in
