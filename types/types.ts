@@ -44,3 +44,15 @@ export type DataTaskParams = {
     important: boolean,
     completed: boolean,
 }
+
+export type SendMailOTPParams = {
+    emailTo: string,
+    otp: string,
+    firstName: string,
+}
+
+export type SendMailReminderParams = {
+    emailTo: string,
+    firstName: string,
+    data: DataTaskParams[]
+}

@@ -68,7 +68,6 @@ export default function InputOTPForm() {
   }
 
   function onSubmit(data: z.infer<typeof OtpSchema>) {
-    console.log(data)
     startTransition(async () => {
       const resOtp = await submitOTP(data.otp)
       if (resOtp.error) {

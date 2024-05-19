@@ -8,7 +8,8 @@ import bcrypt from "bcryptjs";
 import prisma from "../db/db"
 import { generateOTP } from "../utils"
 import { addMinutes } from 'date-fns';
-import { SendMailOTP, SendMailParams } from "../nodemailer"
+import { SendMailOTP } from "../nodemailer"
+import { SendMailOTPParams } from "@/types/types"
 
 export const signUpServer = async (values: z.infer<typeof userRegisterSchema>) => {
     const { firstName, lastName, email, password, verifiedEmail, avatar } = values
@@ -84,7 +85,7 @@ export const sendOtp = async () => {
         }
 
         if (!data.email) return;
-        const dataParams: SendMailParams = {
+        const dataParams: SendMailOTPParams = {
             emailTo: data.email,
             otp,
             firstName: data.firstName.charAt(0).toUpperCase() + data.firstName.slice(1),

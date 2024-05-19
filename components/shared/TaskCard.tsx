@@ -1,6 +1,6 @@
 import { DataTaskParams } from "@/types/types"
-import { formattedDate } from "@/lib/utils"
 import ButtonCardAction from "../ui/ButtonCardAction"
+import { LocalTime } from "../ui/toLocalTime"
 
 function TaskCard({ props }: Readonly<{ props: DataTaskParams }>) {
     return (
@@ -9,7 +9,7 @@ function TaskCard({ props }: Readonly<{ props: DataTaskParams }>) {
             <div className="flex-grow">
                 <p className="text-xs xl:text-sm line-clamp-3">{props.description}</p>
             </div>
-            <p className="text-xs xl:text-sm">{formattedDate(props.deadline)}</p>
+            <LocalTime date={props.deadline}/>
             <ButtonCardAction props={props} />
         </div>
     )

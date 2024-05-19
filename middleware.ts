@@ -23,8 +23,6 @@ export default middleware((req) => {
 
     //If user not logged in and not in public routes they will redirect to login page
     if (!isLoggedIn) return Response.redirect(new URL('/signin', nextUrl))
-
-    // if (!isLoggedIn && !isVerifiedEmail) return Response.redirect(new URL('/verification', nextUrl))
 })
 
 // Optionally, don't invoke Middleware on some paths
