@@ -9,8 +9,6 @@ import { redirect } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const runtime = 'edge'
-
 export const metadata: Metadata = {
   metadataBase: new URL(`${process.env.NEXT_WEBSITE_URL}`),
 
