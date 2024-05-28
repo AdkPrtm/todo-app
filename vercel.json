@@ -1,7 +1,7 @@
 {
     "crons": [
         {
-            "path": "https://todoapp.andhikawidiarto.my.id/api/mail",
+            "path": "/api/mail",
             "schedule": "0 1 * * *"
         }
     ]
