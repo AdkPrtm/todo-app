@@ -1,6 +1,6 @@
 import { OptionsMailOTP, OptionsReminderMail } from "@/constants/constants";
 import { SendMailOTPParams, SendMailReminderParams } from "@/types/types";
-import nodemailer from "nodemailer";
+import nodemailer, { SentMessageInfo } from "nodemailer";
 
 const ConfNodemailer = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -37,24 +37,26 @@ export async function SendMailReminder(params: SendMailReminderParams) {
     await new Promise((resolve, reject) => {
         ConfNodemailer.verify(function (error, success) {
             if (error) {
-                console.log(error);
                 reject(error);
             } else {
-                console.log("Server is ready to take our messages");
                 resolve(success);
             }
         });
     });
 
-    await new Promise((resolve, reject) => {
+    const data: SentMessageInfo | Error = await new Promise((resolve, reject) => {
         ConfNodemailer.sendMail(OptionsReminderMail(params), (err, info) => {
             if (err) {
-                console.error(err);
                 reject(err);
             } else {
-                console.log(info);
+                console.log(info.messageId);
                 resolve(info);
             }
         });
     });
+    if (data.messageId) {
+        return data.messageId
+    } else {
+        return 'Error'
+    }
 }

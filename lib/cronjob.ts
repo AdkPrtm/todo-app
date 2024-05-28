@@ -34,19 +34,23 @@ export const checkDeadline = async () => {
                 id: userId
             }
         })));
-        const filteredTasks = userIds.map((user) => filterTasksByUserId(tasks, user))
+        const filteredTasks = userIds.map((user) => filterTasksByUserId(tasks, user));
+        let results: string[] = [];
 
-        filteredTasks.forEach(async taskByUser => {
-            const dataUser = users.find(user => user!.id === taskByUser[0].userId)
+        for (const taskByUser of filteredTasks) {
+            const dataUser = users.find(user => user?.id === taskByUser[0].userId);
             const data = {
                 emailTo: dataUser!.email,
-                firstName: dataUser?.firstName.charAt(0).toUpperCase() + dataUser!.firstName.slice(1),
+                firstName: dataUser!.firstName.charAt(0).toUpperCase() + dataUser!.firstName.slice(1),
                 data: taskByUser
-            }
-            await SendMailReminder(data)
-        })
+            };
+            const result = await SendMailReminder(data);
+            results.push(result);
+        }
 
-        return { success: 'sendMail' }
+        return {
+            data: results
+        };
     } catch (error) {
         return { error: 'Something went wrong' }
     }

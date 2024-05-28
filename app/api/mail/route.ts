@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
             status: 401,
         });
     }
-    await checkDeadline()
+    const res = await checkDeadline()
 
-    return Response.json({ success: true });
+    return Response.json({ message: res });
 }
